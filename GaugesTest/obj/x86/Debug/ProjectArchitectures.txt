@@ -1,0 +1,2 @@
+C:\Users\Alan\Documents\Visual Studio 2015\Projects\Gauges\Gauges\Gauges.csproj;x86
+C:\Users\Alan\Documents\Visual Studio 2015\Projects\Gauges\GaugesTest\GaugesTest.csproj;x86
