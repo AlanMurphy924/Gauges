@@ -1,2 +1,0 @@
-C:\Users\Alan\Documents\Visual Studio 2015\Projects\Gauges\Gauges\Gauges.csproj;arm
-C:\Users\Alan\Documents\Visual Studio 2015\Projects\Gauges\GaugesTest\GaugesTest.csproj;arm
