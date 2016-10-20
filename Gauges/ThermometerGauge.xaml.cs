@@ -224,6 +224,10 @@ namespace Gauges
 
                 drawingSession.FillGeometry(geometry2, ForegroundColor);
 
+                var geometry3 = CanvasGeometry.CreatePath(CreateBorderGauge(sender));
+
+                drawingSession.DrawGeometry(geometry3, Colors.White, 2.0f);
+
                 string text = string.Format("{0:+#0.0;-#0.0;0.0} °C", Temperature);
 
                 FontWeight weight = new FontWeight();
@@ -288,6 +292,33 @@ namespace Gauges
             var center = new Vector2(0, 0);
 
             float outerRadius = 50.0f;
+            float innerRadius = outerRadius * 0.7f;
+
+            var pathBuilder = new CanvasPathBuilder(sender);
+
+            float startAngle = (float)StartAngle;
+            float endAngle = (float)EndAngle;
+
+            float sweepAngle = (float)(StartAngle - EndAngle);
+
+            pathBuilder.BeginFigure(GetVector(outerRadius, startAngle));
+
+            pathBuilder.AddArc(center, outerRadius, outerRadius, startAngle, -sweepAngle);
+
+            pathBuilder.AddLine(GetVector(innerRadius, endAngle));
+
+            pathBuilder.AddArc(center, innerRadius, innerRadius, endAngle, sweepAngle);
+
+            pathBuilder.EndFigure(CanvasFigureLoop.Closed);
+
+            return pathBuilder;
+        }
+
+        private CanvasPathBuilder CreateBorderGauge(ICanvasResourceCreator sender)
+        {
+            var center = new Vector2(0, 0);
+
+            float outerRadius = 49.0f;
             float innerRadius = outerRadius * 0.7f;
 
             var pathBuilder = new CanvasPathBuilder(sender);
