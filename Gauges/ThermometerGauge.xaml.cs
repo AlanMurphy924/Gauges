@@ -212,21 +212,24 @@ namespace Gauges
             using (CanvasDrawingSession drawingSession = args.DrawingSession)
             {
                 Vector2 outputSize = new Vector2((float)(ActualWidth), (float)(ActualHeight));
-                Vector2 sourceSize = new Vector2((float)100.0f, (float)-100.0f);
+                Vector2 sourceSize = new Vector2(100.0f, -100.0f);
 
                 drawingSession.Transform = GetDisplayTransform(outputSize, sourceSize);
 
-                var geometry = CanvasGeometry.CreatePath(CreateBackgroundGauge(sender));
+                using (var geometry = CanvasGeometry.CreatePath(CreateBackgroundGauge(sender)))
+                {
+                    drawingSession.FillGeometry(geometry, Color.FromArgb(255, 25, 25, 25)); // Colors.DarkSlateGray);
+                }
 
-                drawingSession.FillGeometry(geometry, Color.FromArgb(255, 25, 25, 25)); // Colors.DarkSlateGray);
+                using (var geometry2 = CanvasGeometry.CreatePath(CreateForegroundGauge(sender)))
+                {
+                    drawingSession.FillGeometry(geometry2, ForegroundColor);
+                }
 
-                var geometry2 = CanvasGeometry.CreatePath(CreateForegroundGauge(sender));
-
-                drawingSession.FillGeometry(geometry2, ForegroundColor);
-
-                var geometry3 = CanvasGeometry.CreatePath(CreateBorderGauge(sender));
-
-                drawingSession.DrawGeometry(geometry3, Colors.White, 2.0f);
+                using (var geometry3 = CanvasGeometry.CreatePath(CreateBorderGauge(sender)))
+                {
+                    drawingSession.DrawGeometry(geometry3, Colors.White, 2.0f);
+                }
 
                 string text = string.Format("{0:+#0.0;-#0.0;0.0} °C", Temperature);
 
@@ -234,19 +237,19 @@ namespace Gauges
 
                 weight.Weight = 500;
 
-                CanvasTextFormat textFormat = new CanvasTextFormat { FontSize = 15.0f, FontWeight = weight, WordWrapping = CanvasWordWrapping.NoWrap };
+                using (CanvasTextFormat textFormat = new CanvasTextFormat { FontSize = 15.0f, FontWeight = weight, WordWrapping = CanvasWordWrapping.NoWrap })
+                using (CanvasTextLayout layout = new CanvasTextLayout(drawingSession, text, textFormat, 0.0f, 0.0f))
+                {
+                    float xLocation = -(float)layout.DrawBounds.Width / 2;
+                    float yLocation = -(float)layout.DrawBounds.Height;
 
-                CanvasTextLayout layout = new CanvasTextLayout(drawingSession, text, textFormat, 0.0f, 0.0f);
+                    outputSize = new Vector2((float)(ActualWidth), (float)(ActualHeight));
+                    sourceSize = new Vector2(100.0f, 100.0f);
 
-                float xLocation = -(float)layout.DrawBounds.Width / 2;
-                float yLocation = -(float)layout.DrawBounds.Height;
+                    drawingSession.Transform = GetDisplayTransform(outputSize, sourceSize);
 
-                outputSize = new Vector2((float)(ActualWidth), (float)(ActualHeight));
-                sourceSize = new Vector2((float)100.0f, (float)100.0f);
-
-                drawingSession.Transform = GetDisplayTransform(outputSize, sourceSize);
-
-                drawingSession.DrawTextLayout(layout, xLocation, yLocation, ForegroundColor);
+                    drawingSession.DrawTextLayout(layout, xLocation, yLocation, ForegroundColor);
+                }
             }
         }
 
