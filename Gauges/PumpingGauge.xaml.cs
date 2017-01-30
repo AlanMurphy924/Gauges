@@ -256,7 +256,7 @@ namespace Gauges
 
                 using (var geometry3 = CanvasGeometry.CreatePath(CreateBorderGauge(sender)))
                 {
-                    drawingSession.DrawGeometry(geometry3, Colors.White, 1.0f);
+                    drawingSession.DrawGeometry(geometry3, Colors.White, 2.0f);
                 }
 
                 outputSize = new Vector2((float)(ActualWidth), (float)(ActualHeight));
