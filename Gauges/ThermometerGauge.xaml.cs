@@ -306,6 +306,8 @@ namespace Gauges
 
             pathBuilder.BeginFigure(GetVector(outerRadius, startAngle));
 
+            pathBuilder.SetSegmentOptions(CanvasFigureSegmentOptions.ForceRoundLineJoin);
+
             pathBuilder.AddArc(center, outerRadius, outerRadius, startAngle, -sweepAngle);
 
             pathBuilder.AddLine(GetVector(innerRadius, endAngle));
